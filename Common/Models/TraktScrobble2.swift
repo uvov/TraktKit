@@ -8,7 +8,7 @@
 import Foundation
 
 /// 媒体内容ID模型
-public struct MediaIds: Encodable {
+public struct ScrobbleIds: Encodable {
     public let tmdb: String?
     public let tvdb: String?
     public let trakt: Int?
@@ -49,7 +49,7 @@ public struct MediaIds: Encodable {
 }
 
 /// 剧集信息模型
-public struct Episode: Encodable {
+public struct ScrobbleEpisode: Encodable {
     public let season: Int
     public let number: Int
 
@@ -62,9 +62,9 @@ public struct Episode: Encodable {
 /// 媒体内容进度跟踪模型
 public struct TraktScrobble2: Encodable {
     // 互斥的媒体类型
-    public let movie: MediaIds?
-    public let show: MediaIds?
-    public let episode: Episode?
+    public let movie: ScrobbleIds?
+    public let show: ScrobbleIds?
+    public let episode: ScrobbleEpisode?
 
     // 公共属性
     public let appDate: String?
@@ -75,7 +75,7 @@ public struct TraktScrobble2: Encodable {
     }
 
     /// 初始化电影进度
-    public init(movie: MediaIds, progress: Float, appDate: String? = nil) {
+    public init(movie: ScrobbleIds, progress: Float, appDate: String? = nil) {
         self.movie = movie
         self.show = nil
         self.episode = nil
@@ -84,7 +84,7 @@ public struct TraktScrobble2: Encodable {
     }
 
     /// 初始化剧集进度
-    public init(show: MediaIds, episode: Episode, progress: Float, appDate: String? = nil) {
+    public init(show: ScrobbleIds, episode: ScrobbleEpisode, progress: Float, appDate: String? = nil) {
         self.movie = nil
         self.show = show
         self.episode = episode
