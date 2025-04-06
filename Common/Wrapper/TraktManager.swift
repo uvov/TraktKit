@@ -21,7 +21,7 @@ public class TraktManager {
     // MARK: - Properties
     
     private enum Constants {
-        static let tokenExpirationDefaultsKey = "accessTokenExpirationDate"
+        static let tokenExpirationDefaultsKey = "Trakt.accessTokenExpirationDate"
         static let oneMonth: TimeInterval = 2629800
     }
     
@@ -40,8 +40,8 @@ public class TraktManager {
     }()
     
     // Keys
-    let accessTokenKey = "accessToken"
-    let refreshTokenKey = "refreshToken"
+    let accessTokenKey = "Trakt.accessToken"
+    let refreshTokenKey = "Trakt.refreshToken"
     
     let session: URLSessionProtocol
  
@@ -488,7 +488,7 @@ public class TraktManager {
         let timeInterval = credentials["expires_in"] as! NSNumber
         let expiresDate = Date(timeIntervalSinceNow: timeInterval.doubleValue)
         
-        UserDefaults.standard.set(expiresDate, forKey: "accessTokenExpirationDate")
+        UserDefaults.standard.set(expiresDate, forKey: "Trakt.accessTokenExpirationDate")
         UserDefaults.standard.synchronize()
         
         // Post notification
