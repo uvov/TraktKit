@@ -117,7 +117,42 @@ public struct SyncEpisode: Encodable {
 public struct SyncMovie: Encodable {
     let ids: TraktIds
 
+    enum CodingKeys: String, CodingKey {
+        case ids
+    }
+
+    // 为了访问TraktIds内部的ids字段
+    enum IdsCodingKeys: String, CodingKey {
+        case ids
+    }
+
+    // TraktIds内部的ids字段中的键
+    enum InnerIdsCodingKeys: String, CodingKey {
+        case tmdb, tvdb, trakt, imdb
+    }
+
     public init(ids: TraktIds) {
         self.ids = ids
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        // 自定义ids字段编码逻辑
+        var idsContainer = container.nestedContainer(keyedBy: InnerIdsCodingKeys.self, forKey: .ids)
+
+        // 将TraktIds中的各个ID直接编码到ids字段中
+        if let tmdb = ids.tmdb {
+            try idsContainer.encode(tmdb, forKey: .tmdb)
+        }
+        if let tvdb = ids.tvdb {
+            try idsContainer.encode(tvdb, forKey: .tvdb)
+        }
+        if let trakt = ids.trakt {
+            try idsContainer.encode(trakt, forKey: .trakt)
+        }
+        if let imdb = ids.imdb {
+            try idsContainer.encode(imdb, forKey: .imdb)
+        }
     }
 }
