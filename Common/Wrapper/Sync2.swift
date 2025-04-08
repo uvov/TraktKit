@@ -29,7 +29,6 @@ extension TraktManager {
 
         if movies != nil && shows != nil {
             return nil
-            body = movies
         } else if movies != nil {
             body = movies
         } else if shows != nil {
