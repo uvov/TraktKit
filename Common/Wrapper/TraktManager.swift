@@ -22,7 +22,7 @@ public class TraktManager {
     
     private enum Constants {
         static let tokenExpirationDefaultsKey = "Trakt.accessTokenExpirationDate"
-        static let oneDay: TimeInterval = 43200
+        static let oneDay: TimeInterval = 82800 // 23 个小时
     }
     
     // MARK: Internal

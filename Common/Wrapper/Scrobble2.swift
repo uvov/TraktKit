@@ -20,7 +20,30 @@ extension TraktManager {
      */
     @discardableResult
     public func scrobble2Start(_ scrobble: TraktScrobble2, completion: @escaping ObjectCompletionHandler<ScrobbleResult>) throws -> URLSessionDataTaskProtocol? {
-        return try perform("start", scrobble: scrobble, completion: completion)
+        // 先检查令牌状态
+        var taskToReturn: URLSessionDataTaskProtocol?
+
+        checkToRefresh { [weak self] result in
+            guard let self = self else {
+                completion(.error(error: NSError(domain: "com.litteral.TraktKit", code: -1, userInfo: [NSLocalizedDescriptionKey: "Self was deallocated"])))
+                return
+            }
+
+            switch result {
+            case .success:
+                // 令牌有效或已刷新，继续执行原来的操作
+                do {
+                    taskToReturn = try self.perform("start", scrobble: scrobble, completion: completion)
+                } catch {
+                    completion(.error(error: error))
+                }
+            case .failure(let error):
+                // 令牌无效且无法刷新，返回错误
+                completion(.error(error: error))
+            }
+        }
+
+        return taskToReturn
     }
 
     // MARK: - Pause
@@ -32,7 +55,30 @@ extension TraktManager {
      */
     @discardableResult
     public func scrobble2Pause(_ scrobble: TraktScrobble2, completion: @escaping ObjectCompletionHandler<ScrobbleResult>) throws -> URLSessionDataTaskProtocol? {
-        return try perform("pause", scrobble: scrobble, completion: completion)
+        // 先检查令牌状态
+        var taskToReturn: URLSessionDataTaskProtocol?
+
+        checkToRefresh { [weak self] result in
+            guard let self = self else {
+                completion(.error(error: NSError(domain: "com.litteral.TraktKit", code: -1, userInfo: [NSLocalizedDescriptionKey: "Self was deallocated"])))
+                return
+            }
+
+            switch result {
+            case .success:
+                // 令牌有效或已刷新，继续执行原来的操作
+                do {
+                    taskToReturn = try self.perform("pause", scrobble: scrobble, completion: completion)
+                } catch {
+                    completion(.error(error: error))
+                }
+            case .failure(let error):
+                // 令牌无效且无法刷新，返回错误
+                completion(.error(error: error))
+            }
+        }
+
+        return taskToReturn
     }
 
     // MARK: - Stop
@@ -48,7 +94,30 @@ extension TraktManager {
      */
     @discardableResult
     public func scrobble2Stop(_ scrobble: TraktScrobble2, completion: @escaping ObjectCompletionHandler<ScrobbleResult>) throws -> URLSessionDataTaskProtocol? {
-        return try perform("stop", scrobble: scrobble, completion: completion)
+        // 先检查令牌状态
+        var taskToReturn: URLSessionDataTaskProtocol?
+
+        checkToRefresh { [weak self] result in
+            guard let self = self else {
+                completion(.error(error: NSError(domain: "com.litteral.TraktKit", code: -1, userInfo: [NSLocalizedDescriptionKey: "Self was deallocated"])))
+                return
+            }
+
+            switch result {
+            case .success:
+                // 令牌有效或已刷新，继续执行原来的操作
+                do {
+                    taskToReturn = try self.perform("stop", scrobble: scrobble, completion: completion)
+                } catch {
+                    completion(.error(error: error))
+                }
+            case .failure(let error):
+                // 令牌无效且无法刷新，返回错误
+                completion(.error(error: error))
+            }
+        }
+
+        return taskToReturn
     }
 
     // MARK: - Private

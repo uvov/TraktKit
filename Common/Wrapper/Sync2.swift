@@ -38,12 +38,36 @@ extension TraktManager {
             return nil
         }
 
-        // 确保 body 不为 nil 并创建请求
-        guard let requestBody = body,
-              let request = post("sync/history", body: requestBody) else {
+        // 确保 body 不为 nil
+        guard let requestBody = body else {
             return nil
         }
 
-        return performRequest(request: request, completion: completion)
+        // 先检查令牌状态
+        var taskToReturn: URLSessionDataTaskProtocol?
+
+        checkToRefresh { [weak self] result in
+            guard let self = self else {
+                completion(.error(error: NSError(domain: "com.litteral.TraktKit", code: -1, userInfo: [NSLocalizedDescriptionKey: "Self was deallocated"])))
+                return
+            }
+
+            switch result {
+            case .success:
+                // 令牌有效或已刷新，继续执行原来的操作
+                guard let request = self.post("sync/history", body: requestBody) else {
+                    completion(.error(error: NSError(domain: "com.litteral.TraktKit", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to create request"])))
+                    return
+                }
+
+                taskToReturn = self.performRequest(request: request, completion: completion)
+
+            case .failure(let error):
+                // 令牌无效且无法刷新，返回错误
+                completion(.error(error: error))
+            }
+        }
+
+        return taskToReturn
     }
 }
