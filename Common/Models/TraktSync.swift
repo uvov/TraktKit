@@ -45,7 +45,7 @@ public struct TraktSync: Encodable {
 
 // 表示电视剧的结构
 public struct SyncShow: Encodable {
-    let seasons: [SyncSeason]
+    let seasons: [SyncSeason]?
     let ids: TraktIds
 
     enum CodingKeys: String, CodingKey {
@@ -62,6 +62,13 @@ public struct SyncShow: Encodable {
         case tmdb, tvdb, trakt, imdb
     }
 
+    // 剧
+    public init(ids: TraktIds) {
+        self.ids = ids
+        self.seasons = nil
+    }
+
+    // 剧的集
     public init(seasons: [SyncSeason], ids: TraktIds) {
         self.seasons = seasons
         self.ids = ids
@@ -95,12 +102,17 @@ public struct SyncShow: Encodable {
 // 表示季度的结构
 public struct SyncSeason: Encodable {
     let number: Int
-    let episodes: [SyncEpisode]
+    let episodes: [SyncEpisode]?
 
 
     public init(number: Int, episodes: [SyncEpisode]) {
         self.number = number
         self.episodes = episodes
+    }
+
+    public init(number: Int) {
+        self.number = number
+        self.episodes = nil
     }
 }
 
