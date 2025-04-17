@@ -488,7 +488,7 @@ public class TraktManager {
         let timeInterval = credentials["expires_in"] as! NSNumber
         let expiresDate = Date(timeIntervalSinceNow: timeInterval.doubleValue)
         
-        UserDefaults.standard.set(expiresDate, forKey: "Trakt.accessTokenExpirationDate")
+        UserDefaults.standard.set(expiresDate, forKey: Constants.tokenExpirationDefaultsKey)
         UserDefaults.standard.synchronize()
         
         // Post notification
