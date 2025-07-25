@@ -8,7 +8,7 @@
 import Foundation
 
 /// 媒体内容ID模型
-public struct TraktIds: Encodable {
+public struct TraktIds: Encodable, Hashable {
     public let tmdb: String?
     public let tvdb: String?
     public let trakt: Int?
