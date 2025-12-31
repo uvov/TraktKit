@@ -431,8 +431,8 @@ public class TraktManager {
                         }
                     }
                 }
-                i += 1
-                sleep(1)
+                i += deviceCode.interval
+                sleep(UInt32(deviceCode.interval))
             }
         }
     }
