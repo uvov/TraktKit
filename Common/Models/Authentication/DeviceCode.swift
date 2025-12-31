@@ -32,6 +32,26 @@ public struct DeviceCode: Codable {
 
         return nil
     }
+
+    public func getQRCode(size: CGSize = CGSize(width: 300, height: 300)) -> UIImage? {
+        let data = self.verificationURL.data(using: String.Encoding.ascii)
+
+        guard let filter = CIFilter(name: "CIQRCodeGenerator") else { return nil }
+        filter.setValue(data, forKey: "inputMessage")
+        filter.setValue("H", forKey: "inputCorrectionLevel") // 设置高容错率
+
+        guard let outputImage = filter.outputImage else { return nil }
+
+        let scaleX = size.width / outputImage.extent.width
+        let scaleY = size.height / outputImage.extent.height
+        let transform = CGAffineTransform(scaleX: scaleX, y: scaleY)
+        let scaledImage = outputImage.transformed(by: transform)
+
+        let context = CIContext()
+        guard let cgImage = context.createCGImage(scaledImage, from: scaledImage.extent) else { return nil }
+
+        return UIImage(cgImage: cgImage)
+    }
     #endif
     #endif
     
