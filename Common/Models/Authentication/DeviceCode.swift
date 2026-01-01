@@ -34,8 +34,10 @@ public struct DeviceCode: Codable {
     }
 
     public func getQRCode(size: CGSize = CGSize(width: 300, height: 300)) -> UIImage? {
-        let data = self.verificationURL.data(using: String.Encoding.ascii)
-
+        let url = "\(self.verificationURL)/\(self.userCode)"
+        guard let data = url.data(using: .utf8) else {
+            return nil
+        }
         guard let filter = CIFilter(name: "CIQRCodeGenerator") else { return nil }
         filter.setValue(data, forKey: "inputMessage")
         filter.setValue("H", forKey: "inputCorrectionLevel") // 设置高容错率
